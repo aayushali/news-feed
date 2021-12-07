@@ -39,7 +39,7 @@
       </q-input>
 
       <div class="row justify-center items-center q-gutter-x-md">
-        <q-btn color="primary" label="Register" v-on:click="onRegister" />
+        <q-btn color="primary" label="Register" @click="onRegister" />
       </div>
 
     </div>
@@ -50,7 +50,7 @@
 import axios from "axios";
 
 export default {
-  name: "Login",
+  name: "Register",
   data() {
     return {
       name: this.name,

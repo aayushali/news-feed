@@ -9,13 +9,13 @@
         label="Email address"
         :rules="[val => !!val || 'Field is required']"
       />
-      <q-input class="q-pb-xl" v-model="data.password" filled :type="isPwd ? 'password' : 'text'" label="Password"
+      <q-input class="q-pb-xl" v-model="data.password" filled :type="data.isPwd ? 'password' : 'text'" label="Password"
                :rules="[val => !!val || 'Field is required']">
         <template v-slot:append>
           <q-icon
-            :name="isPwd ? 'visibility_off' : 'visibility'"
+            :name="data.isPwd ? 'visibility_off' : 'visibility'"
             class="cursor-pointer"
-            @click="isPwd = !isPwd"
+            @click="data.isPwd = !data.isPwd"
           />
         </template>
       </q-input>
@@ -36,13 +36,14 @@ export default {
       data: {
         email: "",
         password: "",
+        isPwd: true,
       },
     };
   },
 
   methods: {
     login(data) {
-      // this.$store.dispatch("auth/login", data);
+      this.$store.dispatch("auth/login", data);
     },
   },
 };
