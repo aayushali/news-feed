@@ -23,7 +23,7 @@
       <p v-if="data.errors" class="text-negative">{{ errors }}</p>
       <p v-else class="text-positive">{{ data.success }}</p>
       <div class="row justify-center items-center q-gutter-x-md">
-        <q-btn color="white" text-color="black" label="Login" v-on:click="login(data)"/>
+        <q-btn color="white" text-color="black" label="Login" v-on:click="login(data),$q.notify('Logging in')"/>
       </div>
     </div>
   </div>
@@ -44,6 +44,7 @@ export default {
   methods: {
     login(data) {
       this.$store.dispatch("auth/login", data);
+      // this.$q.notify("logging in");
     },
   },
 };
