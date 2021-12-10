@@ -3,7 +3,7 @@
     <q-card style="min-width: 600px">
       <q-bar class="bg-primary q-py-lg">
         <q-icon name="person_add"/>
-        <div>Create New User</div>
+        <div>{{ title }}</div>
         <q-space/>
         <q-btn dense flat color="negative" rounded icon="close" v-close-popup>
           <q-tooltip>Close</q-tooltip>
@@ -36,18 +36,18 @@
           hint="Mask: (###) ### - ####" style="width: 90%"
         />
       </q-card-section>
-      <q-card-actions align="right">
+      <q-card-actions align="right" class="q-pr-xl q-pb-md">
         <q-btn flat label="Cancel" color="negative" v-close-popup/>
-        <q-btn flat label="Create User" color="primary" v-close-popup/>
+        <q-btn flat label="Add User" color="primary" v-close-popup/>
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
-
 <script>
 export default {
   name: "UserModal",
-  props: ['confirm'],
+
+  props: ['confirm','createUserTitle'],
   data() {
     return {
       isPwd: true,
@@ -63,11 +63,14 @@ export default {
   computed: {
     value: {
       get() {
-        return this.confirm;
+        return this.confirm.confirm;
       },
       set(value) {
         this.$emit('input', value)
       }
+    },
+    title () {
+        return this.confirm.createUserTitle;
     }
   }
 }
