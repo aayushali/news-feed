@@ -5,9 +5,13 @@ let mutations = {
   CREATE_USER(state, users){
     return state.users.unshift( users.data );
   },
-  DELETE_USER(state, user){
-    let index = state.users.findIndex(item => item.id === user);
+  DELETE_USER(state, id){
+    let index = state.users.findIndex(item => item.id === id);
     state.users.splice(index, 1);
+  },
+  UPDATE_USER(state, data){
+    let index = state.users.findIndex( item => item.id === data.id);
+    return state.users.splice(index, 1, data);
   },
   LOADING (state, loading) {
     state.loading = loading;

@@ -87,10 +87,10 @@ export default {
         this.$store.dispatch('users/create_user', this.user);
 
       }else {
-        console.log(this.updateUserId);
-
-        console.log(this.userId)
-        // this.$store.dispatch('users/update_user', this.user, this.updateUserId );
+        // console.log(this.updateUserId);
+        // console.log(this.userId)
+        // console.log(this.user)
+        this.$store.dispatch('users/update_user', [this.user, this.updateUserId ] );
       }
     },
     update(){

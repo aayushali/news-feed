@@ -63,13 +63,13 @@ let actions = {
       Loading.hide();
     });
   },
-  update_user({commit}, data, id){
+  update_user({commit}, [data, id]){
     Loading.show({
       message: 'Updating post...'
     });
     axiosInstance.post(`${UPDATE_USER}${id}`, data)
       .then( res => {
-        console.log( res.data );
+        commit("UPDATE_USER", res.data.data);
         Loading.hide();
         Notify.create({
           type: 'positive',
