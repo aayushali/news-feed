@@ -1,5 +1,7 @@
-export default function () {
-  return {
-  users: null
-  };
-}
+let state = {
+  users: [],
+  loading: false,
+  errors: []
+};
+
+export default state;
