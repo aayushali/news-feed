@@ -48,7 +48,7 @@
 export default {
   name: "UserModal",
 
-  props: ['confirm', 'createUserTitle', 'buttonText'],
+  props: ['confirm', 'createUserTitle', 'buttonText', 'userId'],
   data() {
     return {
       isPwd: true,
@@ -75,12 +75,25 @@ export default {
     },
     buttonTitle() {
       return this.confirm.buttonText;
+    },
+    updateUserId(){
+      return this.confirm.userId;
     }
   },
   methods: {
     submit() {
-      console.log(this.user);
-      this.$store.dispatch('users/create_user', this.user);
+      if( this.buttonTitle === "Add User")
+      {
+        this.$store.dispatch('users/create_user', this.user);
+
+      }else {
+        console.log(this.updateUserId);
+
+        console.log(this.userId)
+        // this.$store.dispatch('users/update_user', this.user, this.updateUserId );
+      }
+    },
+    update(){
     }
   }
 }

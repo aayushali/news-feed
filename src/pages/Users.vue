@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <UserModal v-bind:confirm="{confirm, createUserTitle, buttonText}" @input="confirm = !confirm" />
+    <UserModal v-bind:confirm="{confirm, createUserTitle, buttonText, userId}" @input="confirm = !confirm" />
     <!--     delete prompt-->
     <q-dialog v-model="deleteModel" persistent>
       <q-card class="q-pa-lg">
@@ -62,7 +62,7 @@
             {{ props.row.created_at }}
           </q-td>
           <q-td key="actions" :props="props" class="q-gutter-x-sm">
-            <q-btn round color="secondary" icon="edit" size="8px" @click="updateUser"/>
+            <q-btn round color="secondary" icon="edit" size="8px" @click="updateUser(props.row.id)"/>
             <q-btn round color="negative" icon="delete" size="8px"  @click="deleteUser(props.row.id)" />
           </q-td>
         </q-tr>
@@ -87,6 +87,8 @@ export default {
   data() {
     return {
       filter: '',
+      user:'',
+      userId: '',
       removeUserId: '',
       separator: 'vertical',
       createUserTitle: '',
@@ -167,7 +169,8 @@ export default {
 
   },
   methods: {
-    updateUser() {
+    updateUser(id) {
+      this.userId = id;
       this.createUserTitle = "Update User Info";
       this.buttonText = "Update";
       this.confirm = true;

@@ -4,6 +4,7 @@ import {Loading, Notify} from 'quasar';
 const FETCH_USERS = "/api/users";
 const CREATE_USERS = "/api/store";
 const DELETE_USER = "/api/user_delete/";
+const UPDATE_USER = "/api/user_update/";
 let actions = {
   fetch_users({commit}) {
     Loading.show({
@@ -60,6 +61,24 @@ let actions = {
         commit('RECORD_ERRORS', error.response.data.errors);
       }
       Loading.hide();
+    });
+  },
+  update_user({commit}, data, id){
+    Loading.show({
+      message: 'Updating post...'
+    });
+    axiosInstance.post(`${UPDATE_USER}${id}`, data)
+      .then( res => {
+        console.log( res.data );
+        Loading.hide();
+        Notify.create({
+          type: 'positive',
+          message: 'User updated successfully',
+          position: 'bottom-right'
+        });
+      }).catch( error => {
+        console.log(error);
+        Loading.hide();
     });
   }
 };
