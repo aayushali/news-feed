@@ -11,7 +11,8 @@
       </q-bar>
       <q-card-section class="column items-center q-gutter-y-md ">
         <q-input clearable filled color="secondary" v-model="user.name" label="Full name" style="width: 90%"/>
-        <q-input v-model="user.password" color="secondary" filled :type="isPwd ? 'password' : 'text'" label="Password"
+
+        <q-input v-show="buttonTitle === 'Add User'" v-model="user.password" color="secondary" filled :type="isPwd ? 'password' : 'text'" label="Password"
                  style="width: 90%">
           <template v-slot:append>
             <q-icon
@@ -45,10 +46,12 @@
   </q-dialog>
 </template>
 <script>
+import {mapGetters} from "vuex";
+
 export default {
   name: "UserModal",
 
-  props: ['confirm', 'createUserTitle', 'buttonText', 'userId'],
+  props: ['confirm', 'createUserTitle', 'buttonText', 'userId', 'currentUserDetails'],
   data() {
     return {
       isPwd: true,
@@ -76,25 +79,27 @@ export default {
     buttonTitle() {
       return this.confirm.buttonText;
     },
-    updateUserId(){
+    updateUserId() {
       return this.confirm.userId;
-    }
+    },
+    currentUserValues() {
+      return this.confirm.currentUserDetails;
+    },
+  },
+  watch: {
+    currentUserDetails() {
+      this.user = this.currentUserDetails
+    },
   },
   methods: {
     submit() {
-      if( this.buttonTitle === "Add User")
-      {
+      console.log(this.currentUserValues);
+      if (this.buttonTitle === "Add User") {
         this.$store.dispatch('users/create_user', this.user);
-
-      }else {
-        // console.log(this.updateUserId);
-        // console.log(this.userId)
-        // console.log(this.user)
-        this.$store.dispatch('users/update_user', [this.user, this.updateUserId ] );
+      } else {
+        this.$store.dispatch('users/update_user', [this.user, this.updateUserId]);
       }
     },
-    update(){
-    }
   }
 }
 </script>
