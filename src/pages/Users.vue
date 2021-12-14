@@ -1,6 +1,7 @@
 <template>
   <q-page>
-    <UserModal v-bind:confirm="{confirm, createUserTitle, buttonText, userId, currentUserDetails}" @input="confirm = !confirm" :current-user-details="currentUserDetails"/>
+    <UserModal v-bind:confirm="{confirm, createUserTitle, buttonText, userId, currentUserDetails}"
+               @input="confirm = !confirm" :current-user-details="currentUserDetails"/>
     <!--     delete prompt-->
     <q-dialog v-model="deleteModel" persistent>
       <q-card class="q-pa-lg">
@@ -15,8 +16,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-
-    <q-btn align="between" class="btn-fixed-width q-ml-md" color="accent" label="Create user" icon="person_add"
+    <q-btn align="between" class="btn-fixed-width q-ml-md q-mt-md" color="accent" label="Create User" icon="person_add"
            v-on:click="createUser(user)"/>
     <div class="q-pa-md">
       <q-table
@@ -84,6 +84,7 @@ export default {
     ...mapGetters("users", {
       data: "getUsers",
     }),
+
   },
   data() {
     return {
@@ -168,6 +169,7 @@ export default {
       this.createUserTitle = "Create New User",
         this.buttonText = "Add User";
       this.confirm = true;
+      console.log(this.userDetails);
     },
     deleteUser(id) {
       this.userId = id;

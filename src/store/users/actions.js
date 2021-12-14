@@ -16,9 +16,7 @@ let actions = {
         Loading.hide();
       })
       .catch(error => {
-        if (error.response.status === 422) {
           commit('RECORD_ERRORS', error.response.data.errors);
-        }
         Loading.hide();
       });
   },

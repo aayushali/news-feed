@@ -20,13 +20,15 @@ let actions = {
       scope: "*"
     };
     Object.assign(params, LOGIN_CREDENTIALS);
-    console.log(params);
+    // console.log(params);
 
     return axiosInstance.post(LOGIN_ROUTE, params)
       .then(res => {
         commit('SET_TOKEN', res.data);
         window.location.reload("/admin");
-      })
+      }).catch(err =>{
+        commit('RECORD_ERRORS', err.response.data);
+      });
   },
   fetch({commit, state}) {
     let token = LocalStorage.getItem("access_token");

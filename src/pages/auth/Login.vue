@@ -1,7 +1,7 @@
 <template>
   <div class="column justify-center items-center wrapper">
     <div class="container-form bg-grey-2 q-pa-xl ">
-      <h4 class="text-primary text-center text-weight-bold">LOGIN FORM</h4>
+      <h4 class="text-primary text-center text-weight-bold">Administrative Login</h4>
       <q-input
         type="email"
         filled
@@ -20,17 +20,25 @@
         </template>
       </q-input>
       <!--      <q-input outlined v-model="password" label="Password" class="q-pb-xl"/>-->
-      <p v-if="data.errors" class="text-negative">{{ errors }}</p>
-      <p v-else class="text-positive">{{ data.success }}</p>
+      <p v-if="errorsDetail" class="text-negative text-center ">{{ errorsDetail.message }}</p>
       <div class="row justify-center items-center q-gutter-x-md">
         <q-btn color="white" text-color="black" label="Login" v-on:click="login(data),$q.notify('Logging in')"/>
       </div>
+<!--      <span v-if="errorsDetail">-->
+<!--        {{errorsDetail}}-->
+<!--      </span>-->
     </div>
   </div>
 </template>
 <script>
+import {mapGetters} from "vuex";
 export default {
   name: "Login",
+  computed: {
+    ...mapGetters("auth",{
+      errorsDetail: "errors"
+    })
+  },
   data() {
     return {
       data: {
@@ -43,6 +51,7 @@ export default {
 
   methods: {
     login(data) {
+      console.log();
       this.$store.dispatch("auth/login", data);
       // this.$q.notify("logging in");
     },

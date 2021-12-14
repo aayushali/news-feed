@@ -71,13 +71,13 @@
             <q-avatar size="56px" class="q-mb-sm">
               <img src="https://cdn.quasar.dev/img/boy-avatar.png">
             </q-avatar>
-            <div class="text-weight-bold">Razvan Stoenescu</div>
-            <div>@rstoenescu</div>
+            <div class="text-weight-bold " >Welcome {{ userDetails.name }}</div>
+            <div>{{  userDetails.address }}</div>
           </div>
         </q-img>
     </q-drawer>
 
-    <q-page-container style="padding-top: 0px">
+    <q-page-container>
       <router-view/>
     </q-page-container>
 
@@ -85,7 +85,14 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
 export default {
+computed: {
+...mapGetters("auth", {
+    userDetails: "user"
+  }),
+},
+
   data() {
     return {
       left: false

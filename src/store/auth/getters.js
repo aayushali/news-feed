@@ -7,7 +7,7 @@ let getters = {
     return state.token && state.user;
   },
   errors: state => {
-    return _.flatten( Object.values( state.errors ));
+    return state.errors;
   },
 };
 
