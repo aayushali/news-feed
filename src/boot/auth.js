@@ -26,11 +26,7 @@ export default ( { app , router, store, Vue})=> {
       name: "login",
       component: () => import( "pages/auth/Login")
     },
-    {
-      path: "/register",
-      name: "register",
-      component: () => import("pages/auth/Register")
-    }
+
   ];
 
   router.addRoutes([ routeData]);

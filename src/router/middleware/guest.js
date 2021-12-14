@@ -5,7 +5,7 @@ export default async function (to, from, next) {
     .dispatch("auth/fetch")
     .then(r => {
       if (r.status === 200) {
-        next("/admin");
+        next('/');
       } else {
         next();
       }

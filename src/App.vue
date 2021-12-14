@@ -1,6 +1,5 @@
 <template>
   <div id="q-app">
-    <TheNavigation />
     <router-view />
   </div>
 </template>

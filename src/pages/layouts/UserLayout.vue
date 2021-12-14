@@ -10,7 +10,10 @@
           </q-avatar>
           News Feed
         </q-toolbar-title>
+        <q-btn color="negative" icon="logout" label="Logout" @click="logout" />
       </q-toolbar>
+
+
     </q-header>
 
       <q-drawer
@@ -27,7 +30,7 @@
                 <q-icon name="people" />
               </q-item-section>
               <q-item-section >
-                <router-link to="/admin/users">User Management</router-link>
+                <router-link to="/users">User Management</router-link>
               </q-item-section>
             </q-item>
 
@@ -86,6 +89,11 @@ export default {
   data() {
     return {
       left: false
+    }
+  },
+  methods: {
+    logout(){
+      this.$store.dispatch("auth/logout");
     }
   }
 }
