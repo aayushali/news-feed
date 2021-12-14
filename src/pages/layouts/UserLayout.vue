@@ -1,10 +1,9 @@
-<template>
+ <template>
   <q-layout view="hHh LpR fFf">
 
     <q-header elevated className="bg-primary text-white">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="left = !left"/>
-
         <q-toolbar-title>
           <q-avatar>
             <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
@@ -27,9 +26,8 @@
               <q-item-section avatar>
                 <q-icon name="people" />
               </q-item-section>
-
-              <q-item-section>
-                User Management
+              <q-item-section >
+                <router-link to="/admin/users">User Management</router-link>
               </q-item-section>
             </q-item>
 

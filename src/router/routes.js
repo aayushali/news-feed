@@ -14,8 +14,11 @@ Route.view('/admin', 'layouts/UserLayout' ).children(()=> {
 });
 
 Route.view( '/', 'layouts/Auth' ).guard( auth ).children( () => {
-  Route.view( 'dashboard', 'Dashboard' );
+  // Route.view( 'dashboard', 'Dashboard' );
+  Route.view('users', 'Users');
+  // Route.view('/admin','layouts/UserLayout').children(()=>{
+  //   Route.view('users', 'Users');
+  // })
 } );
-
 
 export default Route.all();

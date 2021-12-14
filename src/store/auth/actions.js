@@ -11,13 +11,12 @@ let actions = {
     let params = {
       username: data.email,
       password: data.password,
-      // twofa_token: data.twofa_token
     };
 
     const LOGIN_CREDENTIALS = {
       grant_type: "password",
-      client_id: 9,
-      client_secret: 'XOiqJeYZH5TBa6bEvVyd1Lf6bKkGJR3NulB9D0Xt',
+      client_id: 2,
+      client_secret: '2WACPCOv0IhjvLEZ7chagE4pnxekCkTrDNeDRdCY',
       scope: "*"
     };
     Object.assign(params, LOGIN_CREDENTIALS);
@@ -26,7 +25,7 @@ let actions = {
     return axiosInstance.post(LOGIN_ROUTE, params)
       .then(res => {
         commit('SET_TOKEN', res.data);
-        window.location.reload("/dashboard");
+        window.location.reload("/admin");
       })
   },
   fetch({commit, state}) {
