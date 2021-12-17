@@ -1,10 +1,10 @@
 import {axiosInstance} from "boot/axios";
 import {Loading, Notify} from 'quasar';
 
-const FETCH_USERS = "/api/users";
-const CREATE_USERS = "/api/store";
-const DELETE_USER = "/api/user_delete/";
-const UPDATE_USER = "/api/user_update/";
+const FETCH_USERS = "/api/auth/users";
+const CREATE_USERS = "/api/auth/store";
+const DELETE_USER = "/api/auth/user_delete/";
+const UPDATE_USER = "/api/auth/user_update/";
 let actions = {
   fetch_users({commit}) {
     Loading.show({

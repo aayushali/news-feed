@@ -5,8 +5,8 @@
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="left = !left"/>
         <q-toolbar-title>
-          <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
+          <q-avatar >
+        <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" alt="" >
           </q-avatar>
           News Feed
         </q-toolbar-title>
@@ -29,40 +29,35 @@
               <q-item-section avatar>
                 <q-icon name="people" />
               </q-item-section>
-              <q-item-section >
-                <router-link to="/users">User Management</router-link>
+              <q-item-section  clickable >
+
+              <router-link to="/users" >
+                    User Management
+                </router-link>
+              </q-item-section>
+
+            </q-item>
+
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="sell" />
+              </q-item-section>
+
+              <q-item-section>
+                <router-link to="/tags">Tags</router-link>
               </q-item-section>
             </q-item>
 
             <q-item clickable v-ripple>
               <q-item-section avatar>
-                <q-icon name="star" />
+                <q-icon name="category" />
               </q-item-section>
 
               <q-item-section>
-                Star
+                Categories
               </q-item-section>
             </q-item>
 
-            <q-item clickable v-ripple>
-              <q-item-section avatar>
-                <q-icon name="send" />
-              </q-item-section>
-
-              <q-item-section>
-                Send
-              </q-item-section>
-            </q-item>
-
-            <q-item clickable v-ripple>
-              <q-item-section avatar>
-                <q-icon name="drafts" />
-              </q-item-section>
-
-              <q-item-section>
-                Drafts
-              </q-item-section>
-            </q-item>
           </q-list>
         </q-scroll-area>
 
@@ -106,3 +101,9 @@ computed: {
 }
 </script>
 
+ <style>
+ a {
+   text-decoration: none;
+   color: black;
+ }
+ </style>

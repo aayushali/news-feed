@@ -11,7 +11,7 @@ Route.view( "/auth", 'layouts/Auth' ).guard( guest ).children( () => {
 
 Route.view( '/', 'layouts/UserLayout' ).guard( auth ).children( () => {
   Route.view('users', 'Users');
-
+  Route.view('tags', 'Tags');
 } );
 
 export default Route.all();

@@ -177,7 +177,8 @@ export default {
     },
     removeUser() {
       this.$store.dispatch("users/delete_user", this.userId);
-    }
+    },
+
   }
   ,
   mounted() {
