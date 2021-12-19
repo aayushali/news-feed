@@ -1,8 +1,5 @@
 <template>
   <q-page padding>
-    <TagModel @input="confirm = !confirm" v-bind:confirm="{confirm, currentTagDetails , createTagTitle, buttonText, tagId}"
-              :current-tag-details="currentTagDetails"/>
-    <!-- content -->
     <q-dialog v-model="deleteModel" persistent>
       <q-card class="q-pa-lg">
         <q-card-section class="row items-center">
@@ -12,19 +9,19 @@
 
         <q-card-actions align="right">
           <q-btn flat class="bg-secondary" label="Cancel" color="white" v-close-popup/>
-          <q-btn flat label="Confirm" class="bg-negative" color="white" v-close-popup @click="removeTag"/>
+          <q-btn flat label="Confirm" class="bg-negative" color="white" v-close-popup @click="removeCategory"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-btn align="between" class="btn-fixed-width q-ml-md q-mt-md" color="accent" label="Create Tag" icon="add"
-           v-on:click="createTag(tag)"/>
+    <q-btn align="between" class="btn-fixed-width q-ml-md q-mt-md" color="accent" label="Create Category" icon="add"
+           v-on:click="createCategory(category)"/>
     <div class="q-pa-md">
       <q-table
         :separator="separator"
         inline
         class="my-sticky-header-table"
         title="Tags"
-        :data="tagsList"
+        :data="categoryList"
         :columns="columns"
         :filter="filter"
         flat
@@ -42,18 +39,18 @@
             <q-td :props="props" key="id">
               {{ props.row.id }}
             </q-td>
-            <q-td :props="props" key="tag_name">
-              {{ props.row.tag_name }}
+            <q-td :props="props" key="category_name">
+              {{ props.row.category_name }}
             </q-td>
-            <q-td :props="props" key="tag_type">
-              {{ props.row.tag_type }}
+            <q-td :props="props" key="category_type">
+              {{ props.row.category_type }}
             </q-td>
             <q-td :props="props" key="created_at">
               {{ props.row.created_at }}
             </q-td>
             <q-td key="actions" :props="props" class="q-gutter-x-sm">
-              <q-btn round color="secondary" icon="edit" size="8px" @click="updateTag(props.row.id)"/>
-              <q-btn round color="negative" icon="delete" size="8px" @click="deleteTag(props.row.id)"/>
+              <q-btn round color="secondary" icon="edit" size="8px" @click="updateCategory(props.row.id)"/>
+              <q-btn round color="negative" icon="delete" size="8px" @click="deleteCategory(props.row.id)"/>
             </q-td>
           </q-tr>
         </template>
@@ -62,25 +59,26 @@
   </q-page>
 </template>
 <script>
-import {mapGetters, mapActions} from "vuex";
-import TagModel from "components/Modals/TagsModel";
+import {mapGetters} from "vuex";
+
 export default {
-  components: {TagModel},
+  name: 'Categories',
   computed: {
-    ...mapGetters("tags", {
-      tagsList: "getTags",
-    }),
+    ...mapGetters("category", {
+      categoryList: 'getCategories'
+    })
   },
+
   data() {
     return {
       filter: '',
       currentTagDetails: '',
       confirm: false,
-      createTagTitle:'',
-      buttonText:'',
+      createTagTitle: '',
+      buttonText: '',
       tag: '',
       count: 1,
-      tagId: '',
+      categoryId: '',
       separator: 'vertical',
       deleteModel: false,
       columns: [
@@ -94,19 +92,19 @@ export default {
           sortable: true
         },
         {
-          name: 'tag_name',
+          name: 'category_name',
           required: true,
           label: 'Name',
           align: 'left',
-          field: 'tag_name',
+          field: 'category_name',
           // format: val => `${val}`,
           sortable: true
         },
         {
-          name: 'tag_type',
+          name: 'category_type',
           align: 'center',
           label: 'Type',
-          field: 'tag_type',
+          field: 'category_type',
           sortable: true
         },
         {
@@ -122,36 +120,29 @@ export default {
           label: 'Actions',
           align: 'center'
         },
-      ],
+      ]
+    }
+  },
+  methods: {
+    updateCategory() {
+
+    },
+    deleteCategory(id) {
+      this.categoryId = id;
+      this.deleteModel = true;
+    },
+    removeCategory() {
+      this.$store.dispatch("category/delete_category", this.categoryId);
+    },
+    createTag() {
+      this.confirm = true;
     }
   },
   mounted() {
-    this.fetch_tags();
+    this.$store.dispatch("category/fetch_categories");
   },
-  methods: {
-    ...mapActions("tags", ["fetch_tags"]),
-    updateTag(id) {
-      this.tagDetails = this.$store.state.tags.tags[id];
-      let index = this.tagsList.findIndex(item => item.id === id);
-      this.currentTagDetails = this.tagsList[index];
-      this.tagId = id;
-      this.createTagTitle = "Update Tag";
-      this.buttonText = "Update";
-      this.confirm = true;
-    },
-    deleteTag(id) {
-      this.tagId = id;
-      this.deleteModel = true;
-    },
-    removeTag() {
-      this.$store.dispatch("tags/delete_tag", this.tagId)
-    },
-    createTag() {
-      this.createTagTitle = "Create New Tag",
-        this.buttonText = "Add Tag";
-
-      this.confirm = true;
-    }
-  }
 }
 </script>
+<style>
+
+</style>
