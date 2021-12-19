@@ -74,7 +74,7 @@
 
 <script>
 import {axiosInstance} from "boot/axios";
-import UserModal from "components/UserModal";
+import UserModal from "components/Modals/UserModal";
 import {mapGetters} from "vuex";
 
 export default {
@@ -163,7 +163,6 @@ export default {
       this.createUserTitle = "Update User Info";
       this.buttonText = "Update";
       this.confirm = true;
-
     },
     createUser() {
       this.createUserTitle = "Create New User",

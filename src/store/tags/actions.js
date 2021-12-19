@@ -4,6 +4,7 @@ import {Loading, Notify} from "quasar";
 const FETCH_TAGS = "/api/auth/tags-list";
 const DELETE_TAG = "/api/auth/tag_delete/";
 const CREATE_TAG = "/api/auth/store_tag";
+const UPDATE_TAG = "/api/auth/update_tag/";
 let actions = {
   fetch_tags({commit}) {
     Loading.show({
@@ -45,7 +46,7 @@ let actions = {
     Loading.show({
       message: "Creating New tag..."
     });
-    axiosInstance.post(CREATE_TAG, user)
+    axiosInstance.post(CREATE_TAG, tag)
       .then(res => {
         commit("CREATE_TAG", res.data);
         Loading.hide();
@@ -60,6 +61,21 @@ let actions = {
       }
       Loading.hide();
     });
+  },
+  update_tag({commit}, [tag, id]) {
+    Loading.show({
+      message: "Updating Tag..."
+    });
+    axiosInstance.post(`${UPDATE_TAG}${id}`, tag)
+      .then(res=>{
+        commit("UPDATE_TAG", res.data.data);
+        Loading.hide();
+        Notify.create({
+          type: 'positive',
+          message: 'Tag Updated',
+          position: 'bottom-right'
+        });
+      })
   }
 }
 export default actions;
