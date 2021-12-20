@@ -1,12 +1,26 @@
 <template>
   <q-page padding>
+    <CategoryModel v-bind:confirm="{confirm}" @input="confirm = !confirm">
+      <template v-slot:header>
+        {{ update  ? "Update category" : modelTitle }}
+      </template>
+      <template v-slot:body>
+        <q-input clearable filled color="secondary" v-model="categoryDetail.category_name" label="Name"
+                 style="width: 90%"/>
+        <q-input v-model="categoryDetail.category_type" color="secondary" filled label="Category Type"
+                 style="width: 90%">
+        </q-input>
+      </template>
+      <template v-slot:footer>
+        <q-btn flat :label="buttonTitle" color="primary" v-close-popup @click="submit"/>
+      </template>
+    </CategoryModel>
     <q-dialog v-model="deleteModel" persistent>
       <q-card class="q-pa-lg">
         <q-card-section class="row items-center">
           <q-avatar icon="person_remove" color="negative" text-color="white"/>
           <span class="q-ml-md text-uppercase">Are you sure want to do delete this user?</span>
         </q-card-section>
-
         <q-card-actions align="right">
           <q-btn flat class="bg-secondary" label="Cancel" color="white" v-close-popup/>
           <q-btn flat label="Confirm" class="bg-negative" color="white" v-close-popup @click="removeCategory"/>
@@ -60,9 +74,11 @@
 </template>
 <script>
 import {mapGetters} from "vuex";
+import CategoryModel from "components/Modals/CategoryModel";
 
 export default {
   name: 'Categories',
+  components: {CategoryModel},
   computed: {
     ...mapGetters("category", {
       categoryList: 'getCategories'
@@ -72,12 +88,18 @@ export default {
   data() {
     return {
       filter: '',
+      modelTitle: 'Create Category',
       currentTagDetails: '',
       confirm: false,
+      update: false,
       createTagTitle: '',
+      buttonTitle: '',
       buttonText: '',
-      tag: '',
-      count: 1,
+      category: '',
+      categoryDetail: {
+        'category_name': '',
+        'category_type': ''
+      },
       categoryId: '',
       separator: 'vertical',
       deleteModel: false,
@@ -124,8 +146,13 @@ export default {
     }
   },
   methods: {
-    updateCategory() {
-
+    updateCategory(id) {
+      let index = this.categoryList.findIndex(item => item.id === id);
+      this.categoryDetail = this.categoryList[index];
+      this.categoryId = id;
+      this.confirm = true;
+      this.update = true;
+      this.buttonTitle = 'Update';
     },
     deleteCategory(id) {
       this.categoryId = id;
@@ -134,8 +161,20 @@ export default {
     removeCategory() {
       this.$store.dispatch("category/delete_category", this.categoryId);
     },
-    createTag() {
+    createCategory() {
+      this.categoryDetail.category_name = '';
+      this.categoryDetail.category_type = '';
       this.confirm = true;
+      this.buttonTitle = 'Add category';
+    },
+    submit() {
+      if(this.buttonTitle === 'Update'){
+        this.updateCategory(this.categoryId);
+        this.$store.dispatch('category/update_category',[this.categoryDetail, this.categoryId] );
+      }
+      else {
+        this.$store.dispatch('category/create_category', this.categoryDetail);
+      }
     }
   },
   mounted() {

@@ -168,7 +168,6 @@ export default {
       this.createUserTitle = "Create New User",
         this.buttonText = "Add User";
       this.confirm = true;
-      console.log(this.userDetails);
     },
     deleteUser(id) {
       this.userId = id;

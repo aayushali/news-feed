@@ -9,6 +9,10 @@ const mutations = {
     let index = state.categories.findIndex(item => item.id === id);
     state.categories.splice(index, 1);
   },
+  UPDATE_CATEGORY(state, category){
+    let index = state.categories.findIndex( item => item.id === category.id);
+    return state.categories.splice(index, 1, category);
+  }
 }
 
 export default mutations;
