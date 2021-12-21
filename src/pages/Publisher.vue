@@ -44,10 +44,12 @@
               <q-btn push color="primary" round icon="add" size="8px" @click="addLinkRow"/>
             </q-item-label>
             <template v-if="publisher.links.length">
-              <div class="link-wrapper q-gutter-x-sm q-mb-sm" v-for="link in publisher.links">
-                <q-input filled color="secondary" size="20px" label="Type" v-model="publisher.links.type"/>
-                <q-input filled color="secondary" size="20px" label="Link" v-model="publisher.links.links_url"/>
-              </div>
+              <div class="link-wrapper q-gutter-x-sm q-mb-sm" v-for="(link,index) in publisher.links" :key="index">
+                <q-input filled color="secondary" size="20px" label="Type"  v-model="link.type"/>
+                <q-input filled color="secondary" size="20px" label="Link"  v-model="link.links_url"/>
+                <div class="row justify-center items-center" ><q-btn round color="negative" size="12px" icon="clear"  v-if="index>0" @click="publisher.links.splice(index,1)" />
+                </div>
+                </div>
             </template>
 
           </div>
@@ -242,6 +244,7 @@ export default {
     },
     submit() {
       console.log(this.publisher);
+      this.$store.dispatch("publisher/create_publisher", this.publisher);
     },
     addLinkRow() {
       this.publisher.links.push({
@@ -270,4 +273,5 @@ export default {
 .link-wrapper {
   display: flex;
 }
+
 </style>

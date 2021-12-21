@@ -1,20 +1,19 @@
-
 import {auth, guest} from "../router/middleware/index";
 import Route from "vue-routisan";
-Route.setViewResolver( (component) => {
-  return require( 'src/pages/' + component).default;
+
+Route.setViewResolver((component) => {
+  return require('src/pages/' + component).default;
 });
 
-Route.view( "/auth", 'layouts/Auth' ).guard( guest ).children( () => {
+Route.view("/auth", 'layouts/Auth').guard(guest).children(() => {
 
-} );
+});
 
-Route.view( '/', 'layouts/UserLayout' ).guard( auth ).children( () => {
+Route.view('/', 'layouts/UserLayout').guard(auth).children(() => {
   Route.view('users', 'Users');
   Route.view('tags', 'Tags');
   Route.view('categories', 'Categories');
-  Route.view('publishers', 'Publisher'
-  );
-} );
+  Route.view('publishers', 'Publisher');
+});
 
 export default Route.all();
