@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page padding>
     <UserModal v-bind:confirm="{confirm, createUserTitle, buttonText, userId, currentUserDetails}"
                @input="confirm = !confirm" :current-user-details="currentUserDetails"/>
     <!--     delete prompt-->
@@ -24,9 +24,10 @@
         inline
         class="my-sticky-header-table"
         title="Users"
-        :data="data"
+        :data="usersListWithIndex"
         :columns="columns"
         :filter="filter"
+        row-key = "index"
         flat
         bordered
       >
@@ -40,7 +41,7 @@
         <template v-slot:body="props">
           <q-tr :props="props">
             <q-td :props="props" key="id">
-              {{ props.row.id }}
+              {{ props.row.index }}
             </q-td>
             <q-td :props="props" key="name">
               {{ props.row.name }}
@@ -84,6 +85,14 @@ export default {
     ...mapGetters("users", {
       data: "getUsers",
     }),
+    usersListWithIndex(){
+      return this.data.map((user, index)=> {
+        return {
+          ...user,
+          index: ++index
+        }
+      })
+    }
 
   },
   data() {
@@ -102,7 +111,7 @@ export default {
         {
           name: 'id',
           required: true,
-          label: 'ID',
+          label: 'S.N',
           align: 'left',
           field: row => row.id,
           format: val => `${val}`,

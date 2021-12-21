@@ -57,7 +57,15 @@
               <router-link to="/categories">Categories</router-link>
             </q-item-section>
           </q-item>
+          <q-item clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon name="category"/>
+            </q-item-section>
 
+            <q-item-section>
+              <router-link to="/publishers">Publishers</router-link>
+            </q-item-section>
+          </q-item>
         </q-list>
       </q-scroll-area>
 

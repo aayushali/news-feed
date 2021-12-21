@@ -1,6 +1,6 @@
 <template>
   <q-dialog v-model="value" persistent class="dialog-box-wrapper">
-    <q-card style="min-width: 600px">
+    <q-card style="min-width: 900px">
       <q-bar class="bg-primary q-py-lg">
         <q-icon name="category"/>
         <slot name="header"></slot>
@@ -11,7 +11,6 @@
       </q-bar>
       <q-card-section class="column items-center q-gutter-y-md ">
         <slot name="body">
-
         </slot>
       </q-card-section>
       <q-card-actions align="right" class="q-pr-xl q-pb-md">
@@ -25,20 +24,17 @@
 </template>
 <script>
 export default {
-  name: 'CategoryModel',
+  name: 'PublisherModel',
   props: ['confirm'],
   computed: {
     value: {
       get() {
-        return this.confirm.confirm;
+        return this.confirm;
       },
-      set(value) {
-        this.$emit('input', value)
+      set(value){
+        this.$emit('input', value);
       }
-    },
+    }
   }
 }
 </script>
-<style>
-
-</style>

@@ -13,6 +13,8 @@ Route.view( '/', 'layouts/UserLayout' ).guard( auth ).children( () => {
   Route.view('users', 'Users');
   Route.view('tags', 'Tags');
   Route.view('categories', 'Categories');
+  Route.view('publishers', 'Publisher'
+  );
 } );
 
 export default Route.all();

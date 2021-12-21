@@ -35,9 +35,10 @@
         inline
         class="my-sticky-header-table"
         title="Tags"
-        :data="categoryList"
+        :data="categoriesWithIndex"
         :columns="columns"
         :filter="filter"
+        row-key="index"
         flat
         bordered
       >
@@ -51,7 +52,7 @@
         <template v-slot:body="props">
           <q-tr :props="props">
             <q-td :props="props" key="id">
-              {{ props.row.id }}
+              {{ props.row.index }}
             </q-td>
             <q-td :props="props" key="category_name">
               {{ props.row.category_name }}
@@ -82,7 +83,15 @@ export default {
   computed: {
     ...mapGetters("category", {
       categoryList: 'getCategories'
-    })
+    }),
+    categoriesWithIndex(){
+      return this.categoryList.map((category, index )=>{
+        return {
+          ...category,
+          index: ++index
+        }
+      })
+    }
   },
 
   data() {
@@ -107,7 +116,7 @@ export default {
         {
           name: 'id',
           required: true,
-          label: 'ID',
+          label: 'S.N',
           align: 'left',
           field: row => row.id,
           format: val => `${val}`,
