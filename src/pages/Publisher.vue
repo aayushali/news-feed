@@ -6,15 +6,19 @@
         {{ title }}
       </template>
       <template v-slot:body>
-        <q-input clearable filled color="secondary" v-model="publisher.name" label="Publisher Name" style="width: 90%"/>
-        <q-input filled clearable v-model="publisher.email" type="Publisher Email" style="width: 90%">
+        <q-input clearable filled color="secondary" :rules="[val => !!val || 'Field is required']"
+                 v-model="publisher.name" label="Publisher Name" style="width: 90%"/>
+        <q-input filled clearable :rules="[val => !!val || 'Field is required']" v-model="publisher.email"
+                 type="Publisher Email" style="width: 90%">
           <template v-slot:prepend>
             <q-icon name="mail"/>
           </template>
         </q-input>
-        <q-input clearable filled color="secondary" v-model="publisher.reg_no" label="Registration No."
+        <q-input clearable filled color="secondary" :rules="[val => !!val || 'Field is required']"
+                 v-model="publisher.reg_no" label="Registration No."
                  style="width: 90%"/>
-        <q-input clearable filled color="secondary" v-model="publisher.url" label="Publisher URL" style="width: 90%"/>
+        <q-input clearable filled color="secondary" :rules="[val => !!val || 'Field is required']"
+                 v-model="publisher.url" label="Publisher URL" style="width: 90%"/>
         <q-separator spaced/>
         <div class="card">
           <div class="card-left">
@@ -45,11 +49,31 @@
             </q-item-label>
             <template v-if="publisher.links.length">
               <div class="link-wrapper q-gutter-x-sm q-mb-sm" v-for="(link,index) in publisher.links" :key="index">
-                <q-input filled color="secondary" size="20px" label="Type"  v-model="link.type"/>
-                <q-input filled color="secondary" size="20px" label="Link"  v-model="link.links_url"/>
-                <div class="row justify-center items-center" ><q-btn round color="negative" size="12px" icon="clear"  v-if="index>0" @click="publisher.links.splice(index,1)" />
+                <q-select
+                  filled
+                  v-model="link.type"
+                  use-input
+                  hide-selected
+                  fill-input
+                  input-debounce="0"
+                  :options="options"
+                  @filter="filterFn"
+                  label="Select Type"
+                >
+                  <template v-slot:no-option>
+                    <q-item>
+                      <q-item-section class="text-grey">
+                        No results
+                      </q-item-section>
+                    </q-item>
+                  </template>
+                </q-select>
+                <q-input filled color="secondary" size="20px" label="Link" v-model="link.links_url"/>
+                <div class="row justify-center items-center ">
+                  <q-btn round color="negative" size="12px" icon="clear" v-if="index>0"
+                         @click="publisher.links.splice(index,1)"/>
                 </div>
-                </div>
+              </div>
             </template>
 
           </div>
@@ -59,6 +83,20 @@
         <q-btn flat :label="buttonTitle" color="primary" v-close-popup @click="submit"/>
       </template>
     </PublisherModel>
+
+    <!--    Delete Model-->
+    <q-dialog v-model="deleteModel" persistent>
+      <q-card class="q-pa-lg">
+        <q-card-section class="row items-center">
+          <q-avatar icon="person_remove" color="negative" text-color="white"/>
+          <span class="q-ml-md text-uppercase">Are you sure want to do delete this user?</span>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat class="bg-secondary" label="Cancel" color="white" v-close-popup/>
+          <q-btn flat label="Confirm" class="bg-negative" color="white" v-close-popup @click="removePublisher"/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
     <q-btn align="between" class="btn-fixed-width q-ml-md q-mt-md" color="accent" label="Create Publisher"
            icon="person_add"
            v-on:click="createPublisher()"/>
@@ -106,7 +144,7 @@
             </q-td>
 
             <q-td key="actions" :props="props" class="q-gutter-x-sm">
-              <q-btn round color="secondary" icon="edit" size="8px" @click="updateTag(props.row.id)"/>
+              <q-btn round color="secondary" icon="edit" size="8px" @click="updateTag(props.row)"/>
               <q-btn round color="negative" icon="delete" size="8px" @click="deleteTag(props.row.id)"/>
             </q-td>
           </q-tr>
@@ -120,6 +158,9 @@
 import PublisherModel from "components/Modals/PublisherModel";
 import {mapGetters} from "vuex";
 
+const stringOptions = [
+  'API', 'RSS FEED', 'CURL'
+];
 export default {
   name: 'Publisher',
   computed: {
@@ -130,7 +171,13 @@ export default {
       return this.publisherList.map((publisher, index) => {
         return {
           ...publisher,
-          index: ++index
+          index: ++index,
+          links: publisher.links.map(link => {
+            return {
+              type: link.Type,
+              links_url: link.LinkURLs
+            }
+          })
         }
       })
     }
@@ -138,12 +185,16 @@ export default {
   components: {PublisherModel},
   data() {
     return {
+      model: null,
+      options: stringOptions,
       confirm: false,
       filter: '',
-      title: 'Create New Publisher',
+      title: '',
       tagsList: [],
+      publisherId: '',
+      publisherDetail: '',
       currentTagDetails: '',
-      createTagTitle: '',
+      modalTitle: '',
       buttonTitle: '',
       tag: '',
       publisher: {
@@ -206,13 +257,13 @@ export default {
           label: 'Publisher URL',
           field: 'pub_url'
         },
-        {
-          name: 'pub_contact_details',
-          align: 'center',
-          label: 'Contact Details',
-          field: 'pub_contact_details',
-          sortable: true
-        },
+        // {
+        //   name: 'pub_contact_details',
+        //   align: 'center',
+        //   label: 'Contact Details',
+        //   field: 'pub_contact_details',
+        //   sortable: true
+        // },
 
         {
           name: 'created_at',
@@ -228,12 +279,61 @@ export default {
           align: 'center'
         },
       ],
-
     }
   },
   methods: {
+    filterFn(val, update, abort) {
+      update(() => {
+        const needle = val.toLowerCase()
+        this.options = stringOptions.filter(v => v.toLowerCase().indexOf(needle) > -1)
+      })
+    },
+    removePublisher() {
+      this.$store.dispatch("publisher/delete_publisher", this.publisherId);
+    },
+    updateTag(row) {
+      const id = row.id
+      console.log(row);
+      this.publisher = {
+        name: row.pub_name,
+        email: row.pub_email,
+        mobile_number: '',
+        reg_no: row.pub_registration_no,
+        url: row.pub_url,
+        contact_details: row.pub_contact_details,
+      };
+      let index = this.publisherList.findIndex(item => item.id === id);
+
+      this.publisherDetail = this.publisherListWithIndex[index];
+      Object.assign(this.publisher, this.publisherDetail);
+      this.publisherId = id;
+      this.confirm = true;
+      this.update = true;
+      this.buttonTitle = 'Update';
+      this.title = "Update Publisher";
+
+    },
     createPublisher() {
       this.confirm = true;
+      this.publisher = {
+        name: '',
+        email: '',
+        mobile_number: '',
+        reg_no: '',
+        url: '',
+        contact_details: {
+          name: '',
+          mob_num: '',
+          email: '',
+        },
+        links: [
+          {
+            type: '',
+            links_url: '',
+          }
+        ]
+      },
+        this.title = "Create New Publisher";
       this.buttonTitle = "Create";
       this.publisher.links = [
         {
@@ -242,6 +342,11 @@ export default {
         }
       ]
     },
+    deleteTag(id) {
+      this.publisherId = id;
+      this.deleteModel = true;
+    },
+
     submit() {
       console.log(this.publisher);
       this.$store.dispatch("publisher/create_publisher", this.publisher);

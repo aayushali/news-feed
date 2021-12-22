@@ -2,7 +2,7 @@ import {axiosInstance} from "boot/axios";
 import {Loading, Notify} from "quasar";
 
 const FETCH_PUBLISHERS = "/api/auth/publishers";
-const CREATE_PUBLISHER = "/api/auth/store_publisher";
+const CREATE_PUBLISHER = "/api/auth/publisher/create";
 const UPDATE_PUBLISHER = "/api/auth/publisher/update/";
 const DELETE_PUBLISHER = "/api/auth/publisher/delete/";
 
@@ -45,7 +45,7 @@ let actions = {
   },
   create_publisher({commit}, publisher) {
     Loading.show({
-      message: "Creating New Category..."
+      message: "Creating New Publisher..."
     });
     axiosInstance.post(CREATE_PUBLISHER, publisher)
       .then(res => {
